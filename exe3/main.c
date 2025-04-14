@@ -15,6 +15,9 @@ const int I2C_SDA_GPIO = 20;
 const int I2C_SCL_GPIO = 21;
 
 void i2c_task(void *p) {
+    uint8_t id_reg = 0xD0;
+    uint8_t buffer[1];
+    
     i2c_init(i2c_default, 400 * 1000);
     gpio_set_function(I2C_SDA_GPIO, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL_GPIO, GPIO_FUNC_I2C);
@@ -22,7 +25,12 @@ void i2c_task(void *p) {
     gpio_pull_up(I2C_SCL_GPIO);
 
     // TODO
-    // read id chip BMP280
+    // Escreve o endereço do registrador que queremos ler (0xD0)
+    i2c_write_blocking(i2c_default, 0x76, &id_reg, 1, true);
+    
+    // Lê 1 byte (o ID)
+    i2c_read_blocking(i2c_default, 0x76, buffer, 1, false);
+
     printf("BMP280 ID: 0x%X \n", buffer[0]);
 
     while (1) {

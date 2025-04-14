@@ -30,7 +30,10 @@ void i2c_task(void *p) {
     printf("WHOAMI: 0x%X \n", buffer[0]);
 
     // TODO
-    // Leia o INT_ENABLE e imprima o valor
+    // read INT_ENABLE (0x38)
+    reg_address = 0x38;
+    i2c_write_blocking(i2c_default, I2C_CHIP_ADDRESS, &reg_address, 1, true);
+    i2c_read_blocking(i2c_default, I2C_CHIP_ADDRESS, buffer, 1, false);
     printf("INT_ENABLE: 0x%X \n", buffer[0]);
 
     while (1) {
